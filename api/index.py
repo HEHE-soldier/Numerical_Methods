@@ -3,7 +3,7 @@ import numpy as np
 
 app = Flask(__name__)
 
-@app.route('/api/jacobi', methods=[POST])
+@app.route('/api/jacobi', methods=['POST'])
 def jacobi():
     data = request.get_json()
     if not data or 'A' not in data or 'b' not in data:
@@ -14,7 +14,7 @@ def jacobi():
     tol = float(data.get('tol', 1e-6))
     max_iter = int(data.get('max_iter', 100))
     n = len(b)
-    x = np.zeros_liek(b, dtype=float)
+    x = np.zeros_like(b, dtype=float)
 
     if 'x0' in data:
         x = np.array(data['x0'], dtype=float)
