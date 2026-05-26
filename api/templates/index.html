@@ -59,27 +59,27 @@
        </div>
        <script>
             async function calculateJacobi() {
-            const A = JSON.parse(document.getElementById('matrixA').value);
-            const b = JSON.parse(document.getElementById('vectorB').value);
-            const tol = parseFloat(document.getElementById('tolerance').value);
-            const max_iter = parseInt(document.getElementById('maxIter').value);
+                const A = JSON.parse(document.getElementById('matrixA').value);
+                const b = JSON.parse(document.getElementById('vectorB').value);
+                const tol = parseFloat(document.getElementById('tolerance').value);
+                const max_iter = parseInt(document.getElementById('maxIter').value);
 
-            const response = await fetch('/api/jacobi', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ A, b, tol, max_iter })
-            });
+                const response = await fetch('/api/jacobi', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ A, b, tol, max_iter })
+                });
 
-            const data = await response.json();
-            const resultBox = document.getElementById('resultBox');
-            
-            if (response.ok) {
-                document.getElementById('solutionText').innerText = "Solution: " + data.solution.map(x => x.toFixed(4)).join(", ");
-                document.getElementById('iterationText').innerText = "Converged in " + data.iterations + " iterations.";
-                resultBox.style.display = 'block';
-            } else {
-                alert("Error: " + data.error);
-            }
+                const data = await response.json();
+                const resultBox = document.getElementById('resultBox');
+                
+                if (response.ok) {
+                    document.getElementById('solutionText').innerText = "Solution: " + data.solution.map(x => x.toFixed(4)).join(", ");
+                    document.getElementById('iterationText').innerText = "Converged in " + data.iterations + " iterations.";
+                    resultBox.style.display = 'block';
+                } else {
+                    alert("Error: " + data.error);
+                }
             }
         </script>
     </body>
