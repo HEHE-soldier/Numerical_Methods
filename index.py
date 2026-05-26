@@ -12,7 +12,7 @@ def parse_equations(equations):
     for i, eq in enumerate(equations):
         eq = eq.replace(' ', '')
         if '=' not in eq:
-            raise ValueError("Missing '=' sign in equation")
+            raise ValueError("Missing '=' sign")
         
         lhs, rhs = eq.split('=')
         b[i] = float(rhs)
@@ -52,21 +52,26 @@ def jacobi():
         return jsonify({"error": "Zero on diagonal detected"}), 400
 
     R = A - np.diagflat(D)
+    history = []
 
     for i in range(max_iter):
         x_new = (b - np.dot(R, x)) / D
+        history.append(x_new.tolist())
+        
         if np.linalg.norm(x_new - x, ord=np.inf) < tol:
             return jsonify({
                 "solution": x_new.tolist(),
                 "iterations": i+1,
-                "converged": True
+                "converged": True,
+                "history": history
             })
         x = x_new
         
     return jsonify({
         "solution": x.tolist(),
         "iterations": max_iter,
-        "converged": False
+        "converged": False,
+        "history": history
     })
 
 if __name__ == '__main__':

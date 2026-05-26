@@ -11,8 +11,9 @@
             .section{ margin-bottom: 40px;}
             .form-group{margin-bottom: 15px;}
             textarea, input{width: 100%; padding: 8px; box-sizing: border-box;}
-            button{padding: 10px 20px; background-color: white; color: white; border: none; cursor: pointer;}
-            .result{margin-top: 20px; padding: 15px; background-color: white;border-radius: 5px;}
+            button{padding: 10px 20px; background-color: #0070f3; color: white; border: none; cursor: pointer;}
+            .result{margin-top: 20px; padding: 15px; background-color: #f4f4f4; border-radius: 5px;}
+            .history-step { margin: 5px 0; font-family: monospace; }
         </style>
     </head>
     <body>
@@ -34,7 +35,7 @@
                 <p>$$x_2 = \frac{1}{3}(4 - x_1)$$</p>
 
                 <p>We start with an initial guess of x_1 = 0 and x_2 = 0.</p>
-                <p><strong>Iteration x_1 = 0, x_2 = 0:</strong></p>
+                <p><strong>Iteration 1 x_1 = 0, x_2 = 0:</strong></p>
                 <p>$$x_1 = \frac{1}{4}(5 - 0) = 1.25$$</p>
                 <p>$$x_2 = \frac{1}{3}(4 - 0) = 1.3333$$</p>
                 
@@ -81,6 +82,8 @@ x_1 + 3x_2 = 4</textarea>
                 <h3>Results</h3>
                 <p id="solutionText"></p>
                 <p id="iterationText"></p>
+                <h4>Iteration History:</h4>
+                <div id="historyBox"></div>
             </div>
        </div>
        <script>
@@ -97,11 +100,22 @@ x_1 + 3x_2 = 4</textarea>
 
                 const data = await response.json();
                 const resultBox = document.getElementById('resultBox');
+                const historyBox = document.getElementById('historyBox');
                 
                 if (response.ok) {
                     const solutionStr = data.solution.map((val, index) => `x_${index + 1} = ${val.toFixed(4)}`).join(", ");
-                    document.getElementById('solutionText').innerText = "Solution: " + solutionStr;
+                    document.getElementById('solutionText').innerText = "Final Solution: " + solutionStr;
                     document.getElementById('iterationText').innerText = "Converged in " + data.iterations + " iterations.";
+                    
+                    historyBox.innerHTML = "";
+                    data.history.forEach((step, index) => {
+                        const stepStr = step.map((val, i) => `x_${i + 1} = ${val.toFixed(6)}`).join(", ");
+                        const p = document.createElement('p');
+                        p.className = 'history-step';
+                        p.innerText = `Iteration ${index + 1}: [ ${stepStr} ]`;
+                        historyBox.appendChild(p);
+                    });
+
                     resultBox.style.display = 'block';
                 } else {
                     alert("Error: " + data.error);
