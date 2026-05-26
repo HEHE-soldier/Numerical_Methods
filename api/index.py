@@ -1,12 +1,7 @@
-from flask import Flask, request, jsonify,render_template
+from flask import Flask, request, jsonify
 import numpy as np
 
 app = Flask(__name__)
-
-@app.route('/', defaults={'path':''})
-@app.route('/<path:path>', methods=['GET'])
-def home(path):
-    return render_template('index.html')
 
 @app.route('/api/jacobi', methods=['POST'])
 def jacobi():
@@ -28,7 +23,7 @@ def jacobi():
     R = A - np.diagflat(D)
 
     for i in range(max_iter):
-        x_new = (b - np.dot(R,x)) / D
+        x_new = (b - np.dot(R, x)) / D
         if np.linalg.norm(x_new - x, ord=np.inf) < tol:
             return jsonify({
                 "solution": x_new.tolist(),
@@ -36,10 +31,12 @@ def jacobi():
                 "converged": True
             })
         x = x_new
+        
     return jsonify({
         "solution": x.tolist(),
         "iterations": max_iter,
         "converged": False
     })
+
 if __name__ == '__main__':
     app.run()
