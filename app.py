@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import numpy as np
 
-app = Flask(==name==)
+app = Flask(__name__)
 
 @app.route('/api/jacobi', methods=[POST])
 def jacobi():
