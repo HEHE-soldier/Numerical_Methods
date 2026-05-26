@@ -1,7 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,render_template
 import numpy as np
 
 app = Flask(__name__)
+
+@app.route('/', methods=['GET'])
+def home():
+    return render_template('index.html')
 
 @app.route('/api/jacobi', methods=['POST'])
 def jacobi():
